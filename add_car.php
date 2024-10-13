@@ -18,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($stmt->execute()) {
         echo "Car added successfully!";
+        header('Location: admin_dashboard.php');
     } else {
         echo "Error: " . $stmt->error;
     }
