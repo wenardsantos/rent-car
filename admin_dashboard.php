@@ -40,7 +40,6 @@ $result = $conn->query("SELECT * FROM cars");
             <td><?= $car['make'] ?></td>
             <td><?= $car['model'] ?></td>
             <td><?= $car['year'] ?></td>
-            <td><?= $car['price_per_day'] ?></td>
             <td><?= $car['availability'] ? 'Available' : 'Rented' ?></td>
             <td>
                 <a href="edit_car.php?car_id=<?= $car['car_id'] ?>">Edit</a>

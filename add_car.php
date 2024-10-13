@@ -11,11 +11,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $make = $_POST['make'];
     $model = $_POST['model'];
     $year = $_POST['year'];
-    $price_per_day = $_POST['price_per_day'];
 
     // Insert car into the database
-    $stmt = $conn->prepare("INSERT INTO cars (make, model, year, price_per_day) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param('ssii', $make, $model, $year, $price_per_day);
+    $stmt = $conn->prepare("INSERT INTO cars (make, model, year) VALUES (?, ?, ?)");
+    $stmt->bind_param('ssi', $make, $model, $year );
 
     if ($stmt->execute()) {
         echo "Car added successfully!";
