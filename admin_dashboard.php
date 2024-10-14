@@ -32,6 +32,7 @@ $result = $conn->query("SELECT * FROM cars");
             <th>Model</th>
             <th>Year</th>
             <th>Availability</th>
+            <th>Price per day</th>
             <th>Actions</th>
         </tr>
         <?php while ($car = $result->fetch_assoc()): ?>
@@ -42,6 +43,7 @@ $result = $conn->query("SELECT * FROM cars");
             <td><?= $car['model'] ?></td>
             <td><?= $car['year'] ?></td>
             <td><?= $car['availability'] ? 'Available' : 'Rented' ?></td>
+            <td><?= $car['price_per_day'] ?></td>
             <td>
                 <!--Sending car_id using URL and grab it with $_GET-->
                 <a href="edit_car.php?car_id=<?= $car['car_id'] ?>">Edit</a>

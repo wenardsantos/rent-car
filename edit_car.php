@@ -32,9 +32,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $model = $_POST['model'];
     $year = $_POST['year'];
     $availability = $_POST['availability'];
+    $price_per_day = $_POST['price_per_day'];
 
-    $stmt = $conn->prepare("UPDATE cars SET make = ?, model = ?, year = ?, availability = ? WHERE car_id = ?");
-    $stmt->bind_param('ssiii', $make, $model, $year, $availability, $car_id);
+    $stmt = $conn->prepare("UPDATE cars SET make = ?, model = ?, year = ?, availability = ?, price_per_day = ? WHERE car_id = ?");
+    $stmt->bind_param('ssiidi', $make, $model, $year, $availability, $price_per_day, $car_id);
 
     if ($stmt->execute()) {
         echo "Car updated successfully!";
@@ -62,6 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <option value="1">Available</option>
         <option value="0">Not available</option>
     </select id="availability" name="availability">
+    <input type="number" id="price_per_day" name="price_per_day" value="<?= htmlspecialchars($car['price_per_day'])?>" step=".01">
     <input type="submit" value="Submit">
    </form> 
 </body>
