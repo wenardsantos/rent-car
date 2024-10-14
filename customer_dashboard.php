@@ -29,6 +29,7 @@ $result = $conn->query("SELECT * FROM cars WHERE availability = 1");
             <th>Make</th>
             <th>Model</th>
             <th>Year</th>
+            <th>Availability</th>
             <th>Price per Day</th>
         </tr>
         <?php while ($car = $result->fetch_assoc()): ?>
@@ -37,6 +38,7 @@ $result = $conn->query("SELECT * FROM cars WHERE availability = 1");
             <td><?= $car['make'] ?></td>
             <td><?= $car['model'] ?></td>
             <td><?= $car['year'] ?></td>
+            <td><?= $car['availability'] ? "Available" : "Rented" ?></td>
             <td><?= $car['price_per_day'] ?></td>
         </tr>
         <?php endwhile; ?>

@@ -36,12 +36,14 @@ $result = $conn->query("SELECT * FROM cars");
         </tr>
         <?php while ($car = $result->fetch_assoc()): ?>
         <tr>
+            <!--Using an associative array to store the records from database-->
             <td><?= $car['car_id'] ?></td>
             <td><?= $car['make'] ?></td>
             <td><?= $car['model'] ?></td>
             <td><?= $car['year'] ?></td>
             <td><?= $car['availability'] ? 'Available' : 'Rented' ?></td>
             <td>
+                <!--Sending car_id using URL and grab it with $_GET-->
                 <a href="edit_car.php?car_id=<?= $car['car_id'] ?>">Edit</a>
                 <a href="delete_car.php?car_id=<?= $car['car_id'] ?>">Delete</a>
             </td>
