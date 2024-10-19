@@ -6,7 +6,7 @@ A very basic car rental system that streamlines car rental companies and custome
 - HTML
 - CSS
 - PHP
-- MySQL
+- MySQL (Ver 8.0.39)
 - Apache2
 
 ## Team:
