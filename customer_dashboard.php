@@ -8,7 +8,9 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'customer') {
 }
 
 include 'connect_db.php';
-$sql = "SELECT * FROM cars WHERE car_id NOT IN (SELECT car_id FROM rentals WHERE rent_date IS NULL)";
+
+$sql = "SELECT * FROM cars WHERE availability=1";
+
 $result = $conn->query($sql);
 ?>
 
@@ -30,7 +32,7 @@ $result = $conn->query($sql);
             <th>Year</th>
             <th>Availability</th>
             <th>Price per Day</th>
-
+            <th>Actions</th>
         </tr>
         <?php while ($car = $result->fetch_assoc()): ?>
         <tr>

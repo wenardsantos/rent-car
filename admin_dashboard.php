@@ -50,6 +50,7 @@ $rental_results = $conn->query($sql);
                 <td><?= $cars['make']?></td>
                 <td><?= $cars['model']?></td>
                 <td><?= $cars['year']?></td>
+                <td><?= $cars['availability'] ? 'Available' : 'Not available'?></td>
                 <td><?= $cars['price_per_day']?></td>
                 <td>
                     <a href="edit_car.php?car_id=<?= $cars['car_id'] ?>">
