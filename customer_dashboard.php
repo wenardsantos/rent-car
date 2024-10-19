@@ -8,8 +8,8 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'customer') {
 }
 
 include 'connect_db.php';
-
-$result = $conn->query("SELECT * FROM cars WHERE availability = 1");
+$sql = "SELECT * FROM cars WHERE car_id NOT IN (SELECT car_id FROM rentals WHERE rent_date IS NULL)";
+$result = $conn->query($sql);
 ?>
 
 <!DOCTYPE html>
@@ -39,7 +39,7 @@ $result = $conn->query("SELECT * FROM cars WHERE availability = 1");
             <td><?= $car['year'] ?></td>
             <td><?= $car['availability'] ? "Available" : "Rented" ?></td>
             <td><?= $car['price_per_day'] ?></td>
-            <td><a href="./customer_dashboard.php">Rent this car</a></td>
+            <td><a href="rent_car.php?car_id=<?=$car['car_id']?>">Rent this car</a></td>
         </tr>
         <?php endwhile; ?>
     </table>

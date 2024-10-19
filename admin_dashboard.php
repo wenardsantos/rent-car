@@ -9,8 +9,18 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
 
 include './connect_db.php';
 
+$cars_sql = "SELECT * FROM cars";
+$cars_result = $conn->query($cars_sql);
+
+// Fetch pending cars requests
+$sql = "SELECT r.rental_id, r.car_id, r.user_id, c.make, c.model, u.username, r.status 
+        FROM rentals r
+        JOIN cars c ON r.car_id = c.car_id
+        JOIN users u ON r.user_id = u.user_id
+        WHERE r.status = 'pending'";
+
 // Fetch all cars from database
-$result = $conn->query("SELECT * FROM cars");
+$rental_results = $conn->query($sql);
 ?>
 
 <!DOCTYPE html>
@@ -24,7 +34,6 @@ $result = $conn->query("SELECT * FROM cars");
     <h1>Admin Dashboard</h1>
     <h2>Manage Cars</h2>
     <a href="add_car.html">Add New Car</a>
-
     <table border="1">
         <tr>
             <th>Car ID</th>
@@ -35,22 +44,44 @@ $result = $conn->query("SELECT * FROM cars");
             <th>Price per day</th>
             <th>Actions</th>
         </tr>
-        <?php while ($car = $result->fetch_assoc()): ?>
-        <tr>
-            <!--Using an associative array to store the records from database-->
-            <td><?= $car['car_id'] ?></td>
-            <td><?= $car['make'] ?></td>
-            <td><?= $car['model'] ?></td>
-            <td><?= $car['year'] ?></td>
-            <td><?= $car['availability'] ? 'Available' : 'Rented' ?></td>
-            <td><?= $car['price_per_day'] ?></td>
-            <td>
-                <!--Sending car_id using URL and grab it with $_GET-->
-                <a href="edit_car.php?car_id=<?= $car['car_id'] ?>">Edit</a>
-                <a href="delete_car.php?car_id=<?= $car['car_id'] ?>">Delete</a>
-            </td>
-        </tr>
+        <?php while ($cars = $cars_result->fetch_assoc()): ?>
+            <tr>
+                <td><?= $cars['car_id']?></td>
+                <td><?= $cars['make']?></td>
+                <td><?= $cars['model']?></td>
+                <td><?= $cars['year']?></td>
+                <td><?= $cars['price_per_day']?></td>
+                <td>
+                    <a href="edit_car.php?car_id=<?= $cars['car_id'] ?>">
+                        <button>Edit</button>
+                    </a>
+                    <a href="delete_car.php?car_id=<?= $cars['car_id'] ?>">
+                        <button class="disapprove">Delete</button>
+                    </a>
+                </td>
+            </tr>
         <?php endwhile; ?>
+    </table>
+   
+    <h2>Pending rental request</h2>
+    <table border="1">
+        <tr>
+            <th>Customer</th>
+            <th>Car</th>
+            <th>Days to be rented</th>
+            <th>Actions</th>
+        </tr>
+        <?php while ($rental = $rental_results->fetch_assoc()):?>
+            <tr>
+                <td><?php $rental['username']?></td>
+                <td><?php $rental['make'] . ' ' . $rental['model']?></td>
+                <td><?php $rental['days']?></td>
+                <td>
+                    <a href="approve_rental.php">Approve</a>
+                    <a href="disapprove_rental.php">Disapprove</a>
+                </td>
+            </tr>
+            <?php endwhile;?>
     </table>
 
     <a href="logout.php">Logout</a>
