@@ -10,16 +10,12 @@ include 'connect_db.php';
 if (isset($_GET['car_id']) && isset($_SESSION['user_id'])) {
     $car_id = $_GET['car_id'];
     $user_id = $_SESSION['user_id'];
-    
 
     // Insert the rental record
     $stmt = $conn->prepare("INSERT INTO rentals (car_id, user_id) VALUES (?, ?)");
     $stmt->bind_param('ii', $car_id, $user_id);
     $stmt->execute();
-    echo $stmt->errno;
     header('Location: customer_dashboard.php');
-    echo "Error: " . $stmt->error;
-
 } else {
     echo "No car ID specified!";
 }

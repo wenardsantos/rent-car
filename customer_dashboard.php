@@ -56,6 +56,7 @@ $rentals_result = $stmt->get_result();
        <tr>
         <th>Make</th>
         <th>Status</th>
+        <th>Action</th>
        </tr> 
         <?php while ($rental = $rentals_result->fetch_assoc()): ?>
             <tr>
