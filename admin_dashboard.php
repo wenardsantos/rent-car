@@ -76,8 +76,8 @@ $rentals_result = $conn->query($sql);
                 <td><?= $rental['make']?></td>
                 <td><?= $rental['days']?></td>
                 <td>
-                    <a href="approve_rental.php">Approve</a>
-                    <a href="disapprove_rental.php">Disapprove</a>
+                    <a href="approve_rent.php?rental_id=<?= $rental['rental_id']?>">Approve</a>
+                    <a href="disapprove_rent.php?rental_id=<?= $rental['rental_id']?>">Disapprove</a>
                 </td>
             </tr>
         <?php endwhile;?>
