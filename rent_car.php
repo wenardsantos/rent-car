@@ -7,27 +7,20 @@ if (!isset($_SESSION['user_id'])) {
 
 include 'connect_db.php';
 
-if (isset($_GET['car_id'])) {
+if (isset($_GET['car_id']) && isset($_SESSION['user_id'])) {
     $car_id = $_GET['car_id'];
     $user_id = $_SESSION['user_id'];
-    $rent_date = date('Y-m-d'); // current date as rent date
+    
 
     // Insert the rental record
-    $stmt = $conn->prepare("INSERT INTO rentals (car_id, user_id, rent_date) VALUES (?, ?, ?)");
-    $stmt->bind_param('iis', $car_id, $user_id, $rent_date);
+    $stmt = $conn->prepare("INSERT INTO rentals (car_id, user_id) VALUES (?, ?)");
+    $stmt->bind_param('ii', $car_id, $user_id);
+    $stmt->execute();
+    echo $stmt->errno;
+    header('Location: customer_dashboard.php');
+    echo "Error: " . $stmt->error;
 
-    if ($stmt->execute()) {
-        echo "<h1>Car rented successfully!</h1>";
-        header('Location: customer_dashboard.php');
-        exit();
-    } else {
-        echo "Error: " . $stmt->error;
-    }
-
-    $stmt->close();
 } else {
     echo "No car ID specified!";
 }
-
-$conn->close();
-?>>
+?>

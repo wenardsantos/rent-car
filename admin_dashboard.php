@@ -1,26 +1,24 @@
 <?php
 session_start();
 
-// Check if role is admin
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     header('Location: login.html');
     exit();
 }
 
-include './connect_db.php';
+include 'connect_db.php';
 
 $cars_sql = "SELECT * FROM cars";
 $cars_result = $conn->query($cars_sql);
 
-// Fetch pending cars requests
-$sql = "SELECT r.rental_id, r.car_id, r.user_id, c.make, c.model, u.username, r.status 
+$sql = "SELECT r.rental_id, r.car_id, r.user_id, r.days, c.make, c.model, u.username, r.status 
         FROM rentals r
         JOIN cars c ON r.car_id = c.car_id
         JOIN users u ON r.user_id = u.user_id
         WHERE r.status = 'pending'";
 
-// Fetch all cars from database
-$rental_results = $conn->query($sql);
+$rentals_result = $conn->query($sql);
+
 ?>
 
 <!DOCTYPE html>
@@ -57,7 +55,7 @@ $rental_results = $conn->query($sql);
                         <button>Edit</button>
                     </a>
                     <a href="delete_car.php?car_id=<?= $cars['car_id'] ?>">
-                        <button class="disapprove">Delete</button>
+                        <button>Delete</button>
                     </a>
                 </td>
             </tr>
@@ -72,19 +70,18 @@ $rental_results = $conn->query($sql);
             <th>Days to be rented</th>
             <th>Actions</th>
         </tr>
-        <?php while ($rental = $rental_results->fetch_assoc()):?>
+        <?php while ($rental = $rentals_result->fetch_assoc()): ?>
             <tr>
-                <td><?php $rental['username']?></td>
-                <td><?php $rental['make'] . ' ' . $rental['model']?></td>
-                <td><?php $rental['days']?></td>
+                <td><?= htmlspecialchars($rental['username'])?></td>
+                <td><?= $rental['make']?></td>
+                <td><?= $rental['days']?></td>
                 <td>
                     <a href="approve_rental.php">Approve</a>
                     <a href="disapprove_rental.php">Disapprove</a>
                 </td>
             </tr>
-            <?php endwhile;?>
+        <?php endwhile;?>
     </table>
-
     <a href="logout.php">Logout</a>
 </body>
 </html>
