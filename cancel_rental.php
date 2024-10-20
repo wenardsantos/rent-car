@@ -5,7 +5,7 @@ include 'connect_db.php';
 if (isset($_GET['rental_id'])) {
     $rental_id = $_GET['rental_id'];
 
-    $stmt = $conn->prepare("UPDATE rentals SET status = 'cancelled' WHERE rental_id = ?");
+    $stmt = $conn->prepare("DELETE FROM rentals WHERE rental_id = ?");
     $stmt->bind_param('i', $rental_id);
     $stmt->execute();
 
