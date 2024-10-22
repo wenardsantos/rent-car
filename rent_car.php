@@ -14,4 +14,5 @@ if (isset($_GET['car_id']) && isset($_SESSION['customer_id'])) {
 } else {
     echo "No car ID specified!";
 }
+
 ?>

@@ -3,7 +3,7 @@ session_start();
 
 include 'connect_db.php';
 
-$cars_sql = "SELECT * FROM cars WHERE car_id NOT IN (SELECT car_id FROM rentals WHERE status='approved' AND status='pending')";
+$cars_sql = "SELECT * FROM cars WHERE car_id NOT IN (SELECT car_id FROM rentals WHERE status='approved' and availability=0)";
 
 $cars_results = $conn->query($cars_sql);
 
@@ -21,9 +21,15 @@ $rentals_result = $stmt->get_result();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer Dashboard</title>
+    <style>
+
+    </style>
 </head>
 <body>
-    <h1>Welcome, <?= $_SESSION['username'] ?></h1>
+    <div class="sidebar">
+        <h1>Welcome, <?= $_SESSION['username'] ?></h1>
+    </div>
+    
 
     <h2>Available Cars</h2>
     <table border="1">
