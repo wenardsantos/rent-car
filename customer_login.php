@@ -6,7 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['user_password'];
 
-    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
+    $stmt = $conn->prepare("SELECT * FROM customers WHERE email = ?");
     $stmt->bind_param('s', $email);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -14,14 +14,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($user && password_verify($password, $user['password'])) {
         $_SESSION['user_id'] = $user['user_id'];
-        $_SESSION['role'] = $user['role'];
+
         $_SESSION['username'] = $user['username'];
 
-        if ($user['role'] === 'admin') {
-            header('Location: admin_dashboard.php');
-        } else {
-            header('Location: customer_dashboard.php');
-        }
+        header('Location: customer_dashboard.php');
+
     } else {
         echo "Invalid log in credentials";
     }

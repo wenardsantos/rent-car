@@ -1,12 +1,6 @@
 <?php
 session_start();
 
-// Not a customer go log in again
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'customer') {
-    header('Location: login.php');
-    exit();
-}
-
 include 'connect_db.php';
 
 $cars_sql = "SELECT * FROM cars WHERE car_id NOT IN (SELECT car_id FROM rentals WHERE status='approved' AND status='pending')";

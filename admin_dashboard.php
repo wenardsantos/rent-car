@@ -1,11 +1,6 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-    header('Location: login.html');
-    exit();
-}
-
 include 'connect_db.php';
 
 $cars_sql = "SELECT * FROM cars";
