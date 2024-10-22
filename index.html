@@ -4,12 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Landing Page</title>
+    <style>
+        * {
+            body: 0;
+            padding: 0;
+        }
+        .top-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: .5rem;
+            color: var(#0C2340);
+            border: black solid 1px;
+        }
+        .bottom-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: .5rem;
+            color: var(#0C2340);
+            border: black solid 1px;
+        }
+        .bottom-nav .nav-list {
+            display: flex;
+            gap: 2.2rem;
+        }
+    </style>
 </head>
 <body>
-   <h1>Landing page</h1> 
-   <div>
-    <a href="login.html">Log in</a>
-    <a href="register.html">Register</a>
+   <div class="top-nav">
+       <div class="location">Nueva ecija, Philippines</div>
+       <div class="work-hours">24/7 Open</div>
+       <div class="contact">0966777123</div> 
    </div>
-</body>
+   <div class="bottom-nav">
+        <div class="logo">Logo</div>
+        <div class="nav-list">
+            <div>Home</div>
+            <div>About</div>
+            <div>Services</div>
+            <div>Car list</div>
+            <div><a href="login.html">Log in/Register</a></div>
+        </div>
+   </div>
+</body> 
 </html>
