@@ -7,11 +7,12 @@ $cars_sql = "SELECT * FROM cars WHERE car_id NOT IN (SELECT car_id FROM rentals 
 
 $cars_results = $conn->query($cars_sql);
 
-$rentals_sql = "SELECT r.rental_id, c.make, c.model, r.days, r.status FROM rentals r JOIN cars c ON r.car_id = c.car_id WHERE r.user_id = ?";
+$rentals_sql = "SELECT r.rental_id, c.make, c.model, r.days, r.status FROM rentals r JOIN cars c ON r.car_id = c.car_id WHERE r.customer_id = ?";
 $stmt = $conn->prepare($rentals_sql);
-$stmt->bind_param('i', $_SESSION['user_id']);
+$stmt->bind_param('i', $_SESSION['customer_id']);
 $stmt->execute();
 $rentals_result = $stmt->get_result();
+
 ?>
 
 <!DOCTYPE html>
