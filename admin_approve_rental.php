@@ -10,6 +10,13 @@ if (isset($_GET['rental_id'])) {
     $stmt->bind_param('i', $rental_id);
 
     if ($stmt->execute()) {
+        $sql = "UPDATE customers 
+        SET points = points + 10
+        WHERE customer_id = (SELECT customer_id FROM rentals WHERE rental_id = ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('i', $rental_id);
+        $stmt->execute();
+
         $sql = "UPDATE cars SET availability = 0
                 WHERE car_id = (SELECT car_id FROM rentals WHERE rental_id = ?)";
         $stmt = $conn->prepare($sql);

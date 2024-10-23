@@ -11,7 +11,7 @@
     resize: none;
 
 }
-:root{      /* variable design */
+:root{      
     --color-primary:#0C2340;
     --color-secondary:#6BABD6;
     --color-tertiary:#E0E0F4;
@@ -492,6 +492,7 @@ header .info p{
     border-radius: 0 .2rem 0 .2rem;
     padding: 1rem 1rem 1.5rem;
     position: relative;
+    background-color: #0c2340;
 }
 .cars-container-dets .info .tag{
     position: absolute;
