@@ -3,7 +3,7 @@ session_start();
 
 include 'connect_db.php';
 
-$cars_sql = "SELECT * FROM cars WHERE car_id NOT IN (SELECT car_id FROM rentals WHERE status='approved' and availability=0)";
+$cars_sql = "SELECT * FROM cars WHERE car_id NOT IN (SELECT car_id FROM rentals WHERE status='approved') AND availability = 1";
 
 $cars_results = $conn->query($cars_sql);
 
@@ -174,7 +174,8 @@ $customer = $stmt->get_result();
                             <?php if ($rental['status'] == 'pending'): ?>
                                 <a href="cancel_rental.php?rental_id=<?= $rental['rental_id'] ?>"><button>Cancel</button></a>
                             <?php else: ?>
-                                No Action Available
+                               
+                                <a href="delete_rent_history.php?rental_id=<?= $rental['rental_id'] ?>"><button>Delete history</button></a>
                             <?php endif; ?>
                         </td>
                     </tr>
