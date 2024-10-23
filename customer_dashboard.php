@@ -3,8 +3,8 @@ session_start();
 
 include 'connect_db.php';
 
-$cars_sql = "SELECT * FROM cars WHERE car_id NOT IN (SELECT car_id FROM rentals WHERE status='approved') AND availability = 1";
-
+//$cars_sql = "SELECT * FROM cars WHERE car_id NOT IN (SELECT car_id FROM rentals WHERE status='approved') AND availability = 1";
+$cars_sql = "SELECT * FROM cars WHERE car_id NOT IN (SELECT car_id FROM rentals WHERE status='pending') AND availability = 1";
 $cars_results = $conn->query($cars_sql);
 
 $rentals_sql = "SELECT r.rental_id, c.make, c.model, r.days, r.status FROM rentals r JOIN cars c ON r.car_id = c.car_id WHERE r.customer_id = ? ";
