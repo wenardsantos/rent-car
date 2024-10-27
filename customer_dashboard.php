@@ -3,8 +3,8 @@ session_start();
 
 include 'connect_db.php';
 
-//$cars_sql = "SELECT * FROM cars WHERE car_id NOT IN (SELECT car_id FROM rentals WHERE status='approved') AND availability = 1";
 $cars_sql = "SELECT * FROM cars WHERE car_id NOT IN (SELECT car_id FROM rentals WHERE status='pending') AND availability = 1";
+
 $cars_results = $conn->query($cars_sql);
 
 $rentals_sql = "SELECT r.rental_id, c.make, c.model, r.days, r.status FROM rentals r JOIN cars c ON r.car_id = c.car_id WHERE r.customer_id = ? ";
@@ -25,96 +25,207 @@ $customer = $stmt->get_result();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
     <title>Customer Dashboard</title>
     <style>
+                /* General body and dashboard layout */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
         .dashboard {
             display: flex;
+            min-height: 100vh;
         }
+
         .sidebar {
-            width: 250px;
-            background-color: var(--color-primary);
-            padding: 2rem 1rem;
-        }
-        .main-content {
-            color: black;
-            flex-grow: 1;
-            padding: 2rem;
-            background-color: var(--color-tertiary);
-        }
-
-        .cars-container-dets .info {
             background-color: #0c2340;
+            color: #fff;
+            width: 250px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
+        .sidebar h1 {
+            color: #ffcc00;
+            font-size: 24px;
+        }
+
+        .sidebar h4 {
+            margin: 10px 0;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin: 20px 0;
+        }
+
+        .sidebar ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+
+        .sidebar ul li a:hover {
+            color: #ffcc00;
+        }
+
+        .sidebar a {
+            color: #ffcc00;
+            text-decoration: none;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        /* Main content */
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+
+        /* Car display */
+        .cars-container-dets {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-around;
+            margin-bottom: 40px;
+        }
+
+        .box {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 280px;
+            transition: transform 0.3s;
+        }
+
+        .box:hover {
+            transform: translateY(-5px);
+        }
+
+        .box img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .info {
+            padding: 15px;
+        }
+
+        .info h5 {
+            font-size: 20px;
+            margin: 0;
+            color: #333;
+        }
+
+        .info p {
+            margin: 10px 0 0;
+            font-size: 16px;
+            color: #555;
+        }
+
+        .tag {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        /* Table Styling */
         table {
             width: 100%;
-            border-collapse: collapse; /* Combine borders */
-            margin: 20px 0; /* Space above and below the table */
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Shadow effect */
+            border-collapse: collapse;
+            margin-bottom: 40px;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         th, td {
-            padding: 12px; /* Space inside cells */
-            text-align: left; /* Align text to the left */
-            border-bottom: 1px solid #ddd; /* Bottom border for rows */
+            padding: 12px 15px;
+            text-align: left;
         }
 
         th {
-            background-color: #4CAF50; /* Header background color */
-            color: white; /* Header text color */
+            background-color: #0c2340;
+            color: #fff;
+        }
+
+        td {
+            border-bottom: 1px solid #ddd;
         }
 
         tr:hover {
-            background-color: #f1f1f1; /* Row hover effect */
+            background-color: #f1f1f1;
         }
 
-        tr:nth-child(even) {
-            background-color: #f9f9f9; /* Zebra striping for even rows */
+        .action-buttons button {
+            background-color: #ffcc00;
+            border: none;
+            padding: 8px 12px;
+            color: #333;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
         }
 
-        tr:nth-child(odd) {
-            background-color: #ffffff; /* Background for odd rows */
+        .action-buttons button:hover {
+            background-color: #e6b800;
         }
 
+        /* Form Styling */
         .form-container {
-            background-color: white;
+            background-color: #fff;
             padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            max-width: 400px; /* Limit width */
-            margin: auto; /* Center the form */
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-
-        label {
-            display: block; /* Make labels block elements */
-            margin-bottom: 5px; /* Space below labels */
-            color: #555; /* Slightly lighter color for labels */
+        .form-container form {
+            display: flex;
+            flex-direction: column;
         }
 
-        select, input[type="number"], input[type="submit"] {
-            width: 100%; /* Full width for inputs */
-            padding: 10px; /* Inner padding */
-            margin-bottom: 15px; /* Space between elements */
-            border: 1px solid #ccc; /* Border style */
-            border-radius: 4px; /* Rounded corners */
+        .form-container label {
+            margin-bottom: 8px;
+            font-weight: bold;
         }
 
-        input[type="checkbox"] {
-            width: auto; /* Default width for checkbox */
-            margin-right: 10px; /* Space between checkbox and label */
+        .form-container select,
+        .form-container input[type="number"],
+        .form-container input[type="submit"] {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
         }
 
-        input[type="submit"] {
-            background-color: #4CAF50; /* Green background for submit button */
-            color: white; /* White text color */
-            border: none; /* Remove border */
-            cursor: pointer; /* Pointer cursor on hover */
+        .form-container input[type="checkbox"] {
+            margin-left: 10px;
         }
 
-        input[type="submit"]:hover {
-            background-color: #45a049; /* Darker green on hover */
+        .form-container input[type="submit"] {
+            background-color: #333;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .form-container input[type="submit"]:hover {
+            background-color: #555;
         }
 
     </style>

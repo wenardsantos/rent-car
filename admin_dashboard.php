@@ -23,50 +23,174 @@ $rentals_result = $conn->query($sql);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <style>
+        /* Global Reset */
         * {
             margin: 0;
             padding: 0;
-            list-style: none;
-            text-decoration: none;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
         }
+
+        body {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
         .dashboard {
-            
             display: flex;
             min-height: 100vh;
         }
+
+        /* Sidebar */
         .sidebar {
             width: 250px;
-            background-color: #0C2340;
+            background-color: #0c2340;
             color: white;
             padding: 2rem 1rem;
+            position: fixed;
+            height: 100%;
         }
+
+        .sidebar h2 {
+            font-size: 24px;
+            margin-bottom: 2rem;
+            color: #fff;
+        }
+
         .sidebar ul {
             list-style-type: none;
-            padding: 0;
         }
+
         .sidebar ul li {
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
+
         .sidebar ul li a {
-            color: var(--color-text);
+            color: #fff;
             text-decoration: none;
-            display: flex;
-            align-items: center;
-            padding: 0.5rem;
+            padding: 0.8rem 1rem;
+            display: block;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .sidebar ul li a:hover {
+            background-color: #1A3967;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            padding: 2rem;
+            width: 100%;
+        }
+
+        .main-content h2 {
+            font-size: 28px;
+            margin-bottom: 1.5rem;
+            color: #0C2340;
+        }
+
+        .main-content a {
+            background-color: #0C2340;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .main-content a:hover {
+            background-color: #1A3967;
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: center;
+        }
+
+        th {
+            background-color: #0C2340;
+            color: white;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+
+        /* Buttons inside table */
+        td a {
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            color: white;
+        }
+
+        td a:hover {
+            opacity: 0.9;
+        }
+
+        td a:first-child {
+            background-color: #28A745; /* Green for approve */
+        }
+
+        td a:last-child {
+            background-color: #DC3545; /* Red for disapprove */
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dashboard {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            table {
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="dashboard">
         <div class="sidebar">
-            <h2>Admin dashboard</h2>
+            <h2>Admin Dashboard</h2>
             <ul>
                 <li><a href="#">Dashboard</a></li>
-                <li><a href="#manage-cars">Manage cars</a></li>
-                <li><a href="#rental-request">Rental request</a></li>
-                <li><a href="logout.php">Logout</a></li>
+                <li><a href="#manage-cars">Manage Cars</a></li>
+                <li><a href="#rental-request">Rental Requests</a></li>
             </ul>
         </div>
+
         <div class="main-content">
             <h2 id="manage-cars">Manage Cars</h2>
             <a href="add_car.html">Add New Car</a>
@@ -89,25 +213,21 @@ $rentals_result = $conn->query($sql);
                         <td><?= $cars['availability'] ? 'Available' : 'Not available'?></td>
                         <td><?= $cars['price_per_day']?></td>
                         <td>
-                            <a href="edit_car.php?car_id=<?= $cars['car_id'] ?>">
-                                <button>Edit</button>
-                            </a>
-                            <a href="delete_car.php?car_id=<?= $cars['car_id'] ?>">
-                                <button>Delete</button>
-                            </a>
+                            <a href="edit_car.php?car_id=<?= $cars['car_id'] ?>">Edit</a>
+                            <a href="delete_car.php?car_id=<?= $cars['car_id'] ?>">Delete</a>
                         </td>
                     </tr>
                 <?php endwhile; ?>
             </table>
         
-            <h2 id="rental-request">Pending rental request</h2>
+            <h2 id="rental-request">Pending Rental Requests</h2>
             <table border="1">
                 <tr>
                     <th>Customer</th>
-                    <th>Customer email</th>
+                    <th>Customer Email</th>
                     <th>Car</th>
-                    <th>Days to be rented</th>
-                    <th>Payment amount</th>
+                    <th>Days to Rent</th>
+                    <th>Payment Amount</th>
                     <th>Points</th>
                     <th>Actions</th>
                 </tr>
@@ -128,6 +248,5 @@ $rentals_result = $conn->query($sql);
             </table>
         </div>
     </div>
-    
 </body>
 </html>
