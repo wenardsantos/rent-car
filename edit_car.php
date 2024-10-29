@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-
 include 'connect_db.php';
 
 if (isset($_GET['car_id'])) {
@@ -41,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo "Error: " . $stmt->error;
     }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -51,16 +51,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <title>Edit cars</title>
 </head>
 <body>
-   <form action="edit_car.php?car_id=<?=$car_id?>" method="POST">
-    <input type="text" id="make" name="make" value="<?=htmlspecialchars($car['make'])?>">
-    <input type="text" id="model" name="model" value="<?=htmlspecialchars($car['model'])?>">
-    <input type="number" id="year" name="year" value="<?=htmlspecialchars($car['year'])?>">
-    <select name="availability" id="availability">
-        <option value="1">Available</option>
-        <option value="0">Not available</option>
-    </select id="availability" name="availability">
-    <input type="number" id="price_per_day" name="price_per_day" value="<?= htmlspecialchars($car['price_per_day'])?>" step=".01">
-    <input type="submit" value="Submit">
-   </form> 
+    <form action="edit_car.php?car_id=<?=$car_id?>" method="POST">
+        <input type="text" id="make" name="make" value="<?=htmlspecialchars($car['make'])?>">
+        <input type="text" id="model" name="model" value="<?=htmlspecialchars($car['model'])?>">
+        <input type="number" id="year" name="year" value="<?=htmlspecialchars($car['year'])?>">
+        <select name="availability" id="availability">
+            <option value="1">Available</option>
+            <option value="0">Not available</option>
+        </select id="availability" name="availability">
+        <input type="number" id="price_per_day" name="price_per_day" value="<?= htmlspecialchars($car['price_per_day'])?>" step=".01">
+        
+        <input type="submit" value="Submit">
+    </form>
 </body>
 </html>

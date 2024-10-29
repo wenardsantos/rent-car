@@ -247,8 +247,6 @@ $customer = $stmt->get_result();
             <a href="logout.php">Logout</a>
         </div>
         
-        
-        
         <div class="main-content">
             <div class="container cars-container-dets">
             <?php while ($car = $cars_results->fetch_assoc()): ?>
@@ -277,6 +275,7 @@ $customer = $stmt->get_result();
                 <th>Status</th>
                 <th>Action</th>
             </tr> 
+            
                 <?php while ($rental = $rentals_result->fetch_assoc()): ?>
                     <tr>
                         <td><?= htmlspecialchars($rental['make']) . ' ' . htmlspecialchars($rental['model']) ?></td>
@@ -292,7 +291,7 @@ $customer = $stmt->get_result();
                     </tr>
                 <?php endwhile; ?>
             </table>
-
+        <!--  Rent  -->
             <div class="form-container">
                 <form action="rent_car.php" method="POST">
                     <label for="car_id">Select Car:</label>
@@ -309,14 +308,48 @@ $customer = $stmt->get_result();
                     </select><br><br>
 
                     <label for="redeem_points">Redeem Points:</label>
-                    <input type="checkbox" name="redeem_points" value="yes">500 discount for 50 rent points<br><br>
+                    <input type="checkbox" name="redeem_points" value="yes">500 discount for 50 rent points
 
-                    <label for="days">How long you want to rent this car? (up to 7 days only)</label>
-                    <input type="number" name="days" id="days" min="1" max="7" required>
+                    <script>
+                        
+                        window.onload = function() {
+                            const today = new Date();
+                            const minDate = new Date();
+                            const maxDate = new Date();
+
+                            // Set min date to today
+                            minDate.setDate(today.getDate() + 1); // 1 day from today
+                            // Set max date to 7 days from today
+                            maxDate.setDate(today.getDate() + 7); // 7 days from today
+
+                            // Format dates as YYYY-MM-DD
+                            const formatDate = (date) => date.toISOString().split('T')[0];
+
+                            // Set min and max for departure date
+                            const depInput = document.getElementById("departure_date");
+                            depInput.setAttribute("min", formatDate(minDate));
+                            depInput.setAttribute("max", formatDate(maxDate));
+
+                            // Set min for return date based on departure date selection
+                            depInput.addEventListener('change', function() {
+                                const depDate = new Date(depInput.value);
+                                const returnInput = document.getElementById("return_date");
+                                returnInput.setAttribute("min", formatDate(new Date(depDate.getTime() + 1 * 24 * 60 * 60 * 1000))); // 1 day after departure
+                                returnInput.setAttribute("max", formatDate(new Date(depDate.getTime() + 7 * 24 * 60 * 60 * 1000))); // Max return is 7 days after departure
+                                returnInput.value = ""; // Reset return date when departure changes
+                            });
+                        }
+                    </script>
+
+                    <label for="departure_date">Departure Date:</label>
+                    <input type="date" id="departure_date" name="departure_date" required>
+                    
+                    <label for="return_date">Return Date:</label>
+                    <input type="date" id="return_date" name="return_date" required>
+
                     <input type="submit"  value="Submit Rental Request">
                 </form>
             </div>
-            
         </div>
     </div>
 </body>
