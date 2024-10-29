@@ -7,7 +7,7 @@ $cars_sql = "SELECT * FROM cars WHERE car_id NOT IN (SELECT car_id FROM rentals 
 
 $cars_results = $conn->query($cars_sql);
 
-$rentals_sql = "SELECT r.rental_id, c.make, c.model, r.days, r.status FROM rentals r JOIN cars c ON r.car_id = c.car_id WHERE r.customer_id = ? ";
+$rentals_sql = "SELECT r.rental_id, c.make, c.model, r.days, r.status, r.start_rent_date, r.return_rent_date FROM rentals r JOIN cars c ON r.car_id = c.car_id WHERE r.customer_id = ? ";
 $stmt = $conn->prepare($rentals_sql);
 $stmt->bind_param('i', $_SESSION['customer_id']);
 $stmt->execute();
@@ -272,6 +272,8 @@ $customer = $stmt->get_result();
             <tr>
                 <th>Make</th>
                 <th>Status</th>
+                <th>Departure</th>
+                <th>Return</th>
                 <th>Action</th>
             </tr> 
             
@@ -279,6 +281,8 @@ $customer = $stmt->get_result();
                     <tr>
                         <td><?= htmlspecialchars($rental['make']) . ' ' . htmlspecialchars($rental['model']) ?></td>
                         <td><?= htmlspecialchars($rental['status']) ?></td>
+                        <td><?= htmlspecialchars($rental['start_rent_date']) ?></td>
+                        <td><?= htmlspecialchars($rental['return_rent_date']) ?></td>
                         <td class="action-buttons">
                             <?php if ($rental['status'] == 'pending'): ?>
                                 <a href="cancel_rental.php?rental_id=<?= $rental['rental_id'] ?>"><button>Cancel</button></a>
