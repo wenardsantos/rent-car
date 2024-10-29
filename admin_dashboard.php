@@ -6,7 +6,7 @@ include 'connect_db.php';
 $cars_sql = "SELECT * FROM cars";
 $cars_result = $conn->query($cars_sql);
 
-$sql = "SELECT r.rental_id, r.car_id, r.customer_id, r.days, r.payment_amount, r.points, c.make, c.model, u.username, u.email, r.status 
+$sql = "SELECT r.rental_id, r.car_id, r.customer_id, r.days, r.payment_amount, r.points, c.make, c.model, u.username, u.email, r.status, r.start_rent_date, r.return_rent_date 
         FROM rentals r
         JOIN cars c ON r.car_id = c.car_id
         JOIN customers u ON r.customer_id = u.customer_id
@@ -229,6 +229,8 @@ $rentals_result = $conn->query($sql);
                     <th>Days to Rent</th>
                     <th>Payment Amount</th>
                     <th>Points</th>
+                    <th>Departure date</th>
+                    <th>Return date</th>
                     <th>Actions</th>
                 </tr>
                 <?php while ($rental = $rentals_result->fetch_assoc()): ?>
@@ -239,6 +241,8 @@ $rentals_result = $conn->query($sql);
                         <td><?= htmlspecialchars($rental['days'])?></td>
                         <td><?= htmlspecialchars($rental['payment_amount'])?></td>
                         <td><?= htmlspecialchars($rental['points'])?></td>
+                        <td><?= htmlspecialchars($rental['start_rent_date'])?></td>
+                        <td><?= htmlspecialchars($rental['return_rent_date'])?></td>
                         <td>
                             <a href="admin_approve_rental.php?rental_id=<?= $rental['rental_id']?>">Approve</a>
                             <a href="admin_disapprove_rental.php?rental_id=<?= $rental['rental_id']?>">Disapprove</a>
