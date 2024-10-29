@@ -227,7 +227,6 @@ $customer = $stmt->get_result();
         .form-container input[type="submit"]:hover {
             background-color: #555;
         }
-
     </style>
 </head>
 <body>
